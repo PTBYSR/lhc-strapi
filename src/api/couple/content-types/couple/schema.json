@@ -1,0 +1,21 @@
+{
+  "kind": "collectionType",
+  "collectionName": "couples",
+  "info": {
+    "singularName": "couple",
+    "pluralName": "couples",
+    "displayName": "couples"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "duration": {
+      "type": "string"
+    },
+    "price": {
+      "type": "string"
+    }
+  }
+}

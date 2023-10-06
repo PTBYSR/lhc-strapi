@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "big_banners",
+  "info": {
+    "singularName": "big-banner",
+    "pluralName": "big-banners",
+    "displayName": "big-banner"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "label": {
+      "type": "string"
+    },
+    "img": {
+      "type": "string"
+    }
+  }
+}

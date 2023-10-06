@@ -1,0 +1,22 @@
+{
+  "kind": "collectionType",
+  "collectionName": "service_banners",
+  "info": {
+    "singularName": "service-banner",
+    "pluralName": "service-banners",
+    "displayName": "service-banner",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

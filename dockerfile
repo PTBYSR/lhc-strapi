@@ -28,6 +28,5 @@ RUN npm run build
 # Expose the Strapi port
 EXPOSE 1337
 
-# Start the Strapi application
-CMD ["npm", "start"]
-
+# Start the Strapi application, pointing SQLite to the correct data directory
+CMD ["npm", "start", "--", "--path", "/app/my-strapi-project/data"]

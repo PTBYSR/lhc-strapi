@@ -1,33 +1,34 @@
-# Use an official Node.js runtime as the base image
-FROM node:16
+# Creating multi-stage build for production
+FROM node:18-alpine as build
+RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev vips-dev git > /dev/null 2>&1
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
 
-# Set the working directory in the container
-WORKDIR /app
-
-# Install Python and SQLite3
-RUN apt-get update && apt-get install -y python3 sqlite3
-
-# Copy your existing Strapi project to the container (assuming it's in the same directory as the Dockerfile)
-COPY . /app/my-strapi-project
-
-# Change directory to the Strapi project
-WORKDIR /app/my-strapi-project
-
-# Install Strapi dependencies
-RUN npm install
-
-# Create a directory for SQLite data and set appropriate permissions
-RUN mkdir -p /app/my-strapi-project/data && chmod 777 /app/my-strapi-project/data
-
-# Set SQLite data directory as a volume
-VOLUME /app/my-strapi-project/data
-
-# Build the Strapi project (you can customize this if needed)
+WORKDIR /opt/
+COPY package.json package-lock.json ./
+RUN npm install -g node-gyp
+RUN npm config set fetch-retry-maxtimeout 600000 -g && npm install --only=production
+ENV PATH /opt/node_modules/.bin:$PATH
+WORKDIR /opt/app
+COPY . .
 RUN npm run build
 
-# Expose the Strapi port
+# Creating final production image
+FROM node:18-alpine
+RUN apk add --no-cache vips-dev
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+WORKDIR /opt/
+COPY --from=build /opt/node_modules ./node_modules
+WORKDIR /opt/app
+COPY --from=build /opt/app ./
+ENV PATH /opt/node_modules/.bin:$PATH
+
+RUN chown -R node:node /opt/app
+
+# Create a volume for SQLite database
+VOLUME /opt/app/data
+
+USER node
 EXPOSE 1337
-
-# Start the Strapi application
-CMD ["npm", "start"]
-
+CMD ["npm", "run", "start"]

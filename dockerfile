@@ -16,6 +16,12 @@ WORKDIR /app/my-strapi-project
 # Install Strapi dependencies
 RUN npm install
 
+# Create a directory for SQLite data and set appropriate permissions
+RUN mkdir -p /app/my-strapi-project/data && chmod 777 /app/my-strapi-project/data
+
+# Set SQLite data directory as a volume
+VOLUME /app/my-strapi-project/data
+
 # Build the Strapi project (you can customize this if needed)
 RUN npm run build
 
